@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "coordinate")
+@Table(name = "coordinates")
 public class Coordinate {
     @Id
     @JsonIgnore

@@ -16,7 +16,7 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public class BusinessService {
-    private BusinessRepository businessRepository;
+    private final BusinessRepository businessRepository;
 
     public Map<String, Object> getAllBusinesses() {
         Iterable<Business> businesses = businessRepository.findAll();
@@ -35,13 +35,13 @@ public class BusinessService {
         return businessRepository.save(business);
     }
 
-    public Business updateBusiness(UUID businessId, Business business) {
-        Business businessIsExist = getBusinessById(businessId);
-        if (businessIsExist == null) {
+    public Business updateBusiness(UUID businessId, Business updatedBusiness) {
+        Business existingBusiness = getBusinessById(businessId);
+        if (existingBusiness == null) {
             return null;
         }
-        business.setId(businessId);
-        return businessRepository.save(business);
+        updatedBusiness.setId(businessId);
+        return businessRepository.save(updatedBusiness);
     }
 
     public void deleteBusiness(UUID businessId) {

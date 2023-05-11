@@ -8,7 +8,6 @@ import com.bedevenamdua.service.TransactionService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -23,12 +22,12 @@ public class TransactionController {
 
     @GetMapping()
     public ResponseEntity<Iterable<Transaction>> findAllTransactions() {
-        return ResponseEntity.ok(transactionService.findAll());
+        return ResponseEntity.ok(transactionService.findAllTransactions());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> findTransactionById(@PathVariable int id) {
-        Transaction transaction = transactionService.findById(id);
+        Transaction transaction = transactionService.findTransactionById(id);
         if (transaction == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Transaction with id " + id + " is not found"));
         }
@@ -41,34 +40,34 @@ public class TransactionController {
         if (business == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Business id is not found"));
         }
-        return ResponseEntity.ok(transactionService.findByBusinessId(businessId));
+        return ResponseEntity.ok(transactionService.findTransactionsByBusinessId(businessId));
     }
 
     @PostMapping
-    public ResponseEntity<Object> addTransactionByBusinessId(@Validated @RequestBody TransactionData request) {
-        Business business = businessService.getBusinessById(request.getBusinessId());
+    public ResponseEntity<Object> addTransactionByBusinessId(@RequestBody TransactionData transactionData) {
+        Business business = businessService.getBusinessById(transactionData.getBusinessId());
         if (business == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Can't add transaction, because business ID that you input is not found"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Can't add transaction because the business ID you input was not found"));
         }
-        return ResponseEntity.ok(transactionService.addTransaction(request.getType(), request.getBusinessId()));
+        return ResponseEntity.ok(transactionService.addTransaction(transactionData));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateTransactionById(@PathVariable int id, @Validated @RequestBody TransactionData request) {
-        Transaction transaction = transactionService.findById(id);
-        if (transaction == null) {
+    public ResponseEntity<Object> updateTransactionById(@PathVariable int id, @RequestBody TransactionData request) {
+        Transaction existingTransaction = transactionService.findTransactionById(id);
+        if (existingTransaction == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Transaction with id " + id + " is not found"));
         }
-        return ResponseEntity.ok(transactionService.updateTransaction(id, request.getType()));
+        return ResponseEntity.ok(transactionService.updateTransactionType(id, request.getType()));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteTransactionById(@PathVariable int id) {
-        Transaction transaction = transactionService.findById(id);
-        if (transaction == null) {
+        Transaction existingTransaction = transactionService.findTransactionById(id);
+        if (existingTransaction == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Transaction with id " + id + " is not found"));
         }
-        transactionService.deleteTransaction(id);
+        transactionService.deleteTransactionById(id);
         return ResponseEntity.ok(Map.of("message", "Transaction with id " + id + " has been deleted"));
     }
 }
