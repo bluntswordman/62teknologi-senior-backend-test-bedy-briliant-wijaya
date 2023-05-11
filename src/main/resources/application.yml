@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/enamdua_db_test
+    username: postgres
+    password: ai
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show_sql: true
+  devtools:
+    restart:
+      enabled: false
+  main:
+    web-application-type: servlet
+    allow-bean-definition-overriding: true
