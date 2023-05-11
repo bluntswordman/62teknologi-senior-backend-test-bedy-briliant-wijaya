@@ -1,5 +1,6 @@
 package com.bedevenamdua.service;
 
+import com.bedevenamdua.dto.TransactionData;
 import com.bedevenamdua.entity.Transaction;
 import com.bedevenamdua.repository.TransactionRepository;
 import lombok.AllArgsConstructor;
@@ -13,30 +14,30 @@ import java.util.UUID;
 public class TransactionService {
     private final TransactionRepository transactionRepository;
 
-    public Transaction addTransaction(String type, UUID businessId) {
-        return transactionRepository.addTransaction(type, businessId);
+    public Transaction addTransaction(TransactionData transactionData) {
+        return transactionRepository.addTransaction(transactionData.getType(), transactionData.getBusinessId());
     }
 
-    public Iterable<Transaction> findAll() {
+    public Iterable<Transaction> findAllTransactions() {
         return transactionRepository.findAll();
     }
 
-    public Iterable<Transaction> findByBusinessId(UUID businessId) {
+    public Iterable<Transaction> findTransactionsByBusinessId(UUID businessId) {
         return transactionRepository.findByBusinessId(businessId);
     }
 
-    public Transaction findById(int id) {
+    public Transaction findTransactionById(int id) {
         Optional<Transaction> transaction = transactionRepository.findById(id);
         return transaction.orElse(null);
     }
 
-    public Transaction updateTransaction(int id, String type) {
-        Transaction transaction = findById(id);
+    public Transaction updateTransactionType(int id, String type) {
+        Transaction transaction = findTransactionById(id);
         transaction.setType(type);
         return transactionRepository.save(transaction);
     }
 
-    public void deleteTransaction(int id) {
+    public void deleteTransactionById(int id) {
         transactionRepository.deleteById(id);
     }
 }

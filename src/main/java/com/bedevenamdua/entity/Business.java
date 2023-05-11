@@ -48,6 +48,18 @@ public class Business {
     @Column(name = "url")
     private String url;
 
+    @Column(name = "is_claimed")
+    private boolean isClaimed;
+
+    @Column(name = "date_opened")
+    private String dateOpened;
+
+    @Column(name = "date_closed")
+    private String dateClosed;
+
+    @Column(name = "yelp_menu_url")
+    private String yelpMenuUrl;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_coordinate_id", referencedColumnName = "coordinate_id")
     private Coordinate coordinate;
@@ -60,15 +72,23 @@ public class Business {
     @JoinColumn(name = "fk_business_id", referencedColumnName = "business_id")
     private List<Transaction> transactions;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "business_category",
-            joinColumns = @JoinColumn(name = "fk_business_id"),
-            inverseJoinColumns = @JoinColumn(name = "fk_category_id")
-    )
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_business_id", referencedColumnName = "business_id")
     private List<Category> categories;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_attributes_id", referencedColumnName = "attributes_id")
-    private Attributes attributes;
+    @JoinColumn(name = "fk_attribute_id", referencedColumnName = "attribute_id")
+    private Attribute attribute;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_business_id", referencedColumnName = "business_id")
+    private List<Photo> photos;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_business_id", referencedColumnName = "business_id")
+    private List<SpecialHour> specialHours;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_message_id", referencedColumnName = "message_id")
+    private Message message;
 }

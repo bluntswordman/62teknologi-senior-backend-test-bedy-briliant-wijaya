@@ -6,12 +6,12 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "attributes")
-public class Attributes {
+@Table(name = "attribute")
+public class Attribute {
     @Id
     @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "attributes_id")
+    @Column(name = "attribute_id")
     private int id;
 
     @Column(name = "business_temp_closed")
